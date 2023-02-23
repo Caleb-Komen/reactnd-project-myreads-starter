@@ -28,10 +28,14 @@ searchBooks = query => {
 }
 
 updateShelf = (book, shelf) => {
-  // TODO: update shelf
+  BooksAPI.update(book, shelf).then(() => this.getAllBooks())
 }
 
   componentDidMount() {
+    this.getAllBooks()
+  }
+
+  getAllBooks= () => {
     BooksAPI.getAll().then((books) => {
       const shelves = books.reduce((acc, shelfCategory) => {
         const key = shelfCategory['shelf']
