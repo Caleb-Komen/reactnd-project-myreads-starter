@@ -19,6 +19,7 @@ searchBooks = query => {
   } else {
     BooksAPI.search(query)
     .then((books) => {
+      console.log('books', books)
       this.setState(() => ({
         searchedBooks: books
       }))
@@ -26,12 +27,18 @@ searchBooks = query => {
   }
 }
 
+updateShelf = (book, shelf) => {
+  // TODO: update shelf
+}
+
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
-      const shelves = books.reduce((acc, { shelf, ...rest }) => { 
-        const key = shelf
-        acc[key] = acc[key] || []
-        acc[key].push(rest)
+      const shelves = books.reduce((acc, shelfCategory) => {
+        const key = shelfCategory['shelf']
+        if (!acc[key]) {
+          acc[key] = []
+        }
+        acc[key].push(shelfCategory)
         return acc
       }, {})
       this.setState(() => ({
@@ -67,6 +74,7 @@ searchBooks = query => {
                         key={shelf}
                         shelfTitle={shelf}
                         books={books}
+                        handleUpdateShelf={this.updateShelf}
                     />
                     )
                   })}
