@@ -2,9 +2,9 @@ function Book (props) {
 	const { currentShelf, book, handleUpdateShelf } = props
 
 	const handleUpdateBookShelf = (evt) => {
-    const shelf = evt.target.value;
-    handleUpdateShelf(book, shelf);
-  }
+		const shelf = evt.target.value;
+		handleUpdateShelf(book, shelf);
+  	}
 	return (
 		<div className="book">
 			<div className="book-top">
