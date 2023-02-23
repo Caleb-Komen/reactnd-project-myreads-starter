@@ -1,9 +1,9 @@
 function Book (props) {
-	const { book } = props
+	const { currentShelf, book, handleUpdateShelf } = props
 
-	const handleUpdateBookShelf = (e) => {
-    const value = e.target.value;
-    props.handleUpdateShelf(book, value);
+	const handleUpdateBookShelf = (evt) => {
+    const shelf = evt.target.value;
+    handleUpdateShelf(book, shelf);
   }
 	return (
 		<div className="book">
@@ -14,7 +14,7 @@ function Book (props) {
 				</div>
 				<div className="book-shelf-changer">
 					<select
-						value={book.shelf ? book.shelf : "none"}
+						value={currentShelf ? currentShelf : "none"}
 						onChange={handleUpdateBookShelf}
 					>
 						<option value="move" disabled>Move to...</option>

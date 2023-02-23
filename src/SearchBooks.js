@@ -1,28 +1,81 @@
-import React from "react";
-import BooksList from "./BooksList";
-import { useNavigate } from 'react-router-dom';
-import SearchBooksInput from "./SearchBooksInput";
+import React from "react"
+import * as BooksAPI from './BooksAPI'
+import Book from "./Book"
 
-function SearchBooks(props) {
-	const navigate = useNavigate();
+class SearchBooks extends React.Component {
+	state = {
+		query: '',
+		searchedBooks: []
+	}
 
-	const navigateBack = () => {
-		navigate(-1)
+	 updateQuery = (query) => {
+		this.setState(() => ({
+			query: query
+		}))
+		this.searchBooks(query)
 	 }
 
-	return (
-		<div className="search-books">
-			<div className="search-books-bar">
-				<button className="close-search" onClick={navigateBack}>Close</button>
-				<SearchBooksInput
-					onSearchBook={props.onSearchBook}
-				/>
+	 searchBooks = query => {
+		if (query) {
+			BooksAPI.search(query)
+			.then((books) => {
+				books.error
+				? this.setState(() => ({
+					searchedBooks: []
+				}))
+				: this.setState(() => ({
+					searchedBooks: books
+				}))
+			})
+		} else {
+			this.setState(() => ({
+				searchedBooks: []
+			}))
+		}
+	}
+
+	render() {
+		return (
+			<div className="search-books">
+				<div className="search-books-bar">
+					<button className="close-search" onClick={this.props.onNavigateBack}>Close</button>
+					<div className="search-books-input-wrapper">
+						<input 
+							type="text" 
+							placeholder="Search by title or author"
+							value={this.state.query}
+							onChange={(evt) => this.updateQuery(evt.target.value)}
+						/>
+					</div>
+				</div>
+				<div className="search-books-results">
+				<ol className="books-grid">
+            {
+              this.state.searchedBooks.map(book => {
+                let shelfName = "none";
+
+                this.props.allBooks.map(bk => (
+                  bk.id === book.id ?
+                  shelfName = bk.shelf :
+                  ''
+                ));
+
+                return (
+									<li key={book.id}>
+										<Book
+											book={book}
+											handleUpdateShelf={this.props.handleUpdateShelf}
+											currentShelf={shelfName}
+										/>
+									</li>
+              	)
+              })
+            }
+          </ol>
+				</div>
 			</div>
-			<div className="search-books-results">
-				<BooksList books={props.books}/>
-			</div>
-		</div>
-	)
+		)
+	}
 }
 
 export default SearchBooks

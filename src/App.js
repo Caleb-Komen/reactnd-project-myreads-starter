@@ -2,29 +2,13 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Route, Routes, Link } from 'react-router-dom'
-import SearchBooks from './SearchBooks'
+import SearchPage from './SearchPage'
 import BooksShelf from './BooksShelf'
 
 class BooksApp extends React.Component {
 state = {
   shelves:{},
   searchedBooks: []
-}
-
-searchBooks = query => {
-  if (query === '') {
-    this.setState(() => ({
-      searchedBooks: []
-    }))
-  } else {
-    BooksAPI.search(query)
-    .then((books) => {
-      console.log('books', books)
-      this.setState(() => ({
-        searchedBooks: books
-      }))
-    })
-  }
 }
 
 updateShelf = (book, shelf) => {
@@ -46,6 +30,7 @@ updateShelf = (book, shelf) => {
         return acc
       }, {})
       this.setState(() => ({
+        allBooks: books,
         shelves: shelves
       }))
     })
@@ -58,9 +43,9 @@ updateShelf = (book, shelf) => {
           <Route 
             path='/search'
             element={
-              <SearchBooks
-                books={this.state.searchedBooks}
-                onSearchBook={this.searchBooks}
+              <SearchPage
+                allBooks={this.state.allBooks}
+                handleUpdateShelf={this.updateShelf}
               />
             }
           />
