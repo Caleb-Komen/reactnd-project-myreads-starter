@@ -20,17 +20,11 @@ class SearchBooks extends React.Component {
 			BooksAPI.search(query)
 			.then((books) => {
 				books.error
-				? this.setState(() => ({
-					searchedBooks: []
-				}))
-				: this.setState(() => ({
-					searchedBooks: books
-				}))
+				? this.setState({ searchedBooks: [] })
+				: this.setState({ searchedBooks: books })
 			})
 		} else {
-			this.setState(() => ({
-				searchedBooks: []
-			}))
+			this.setState({ searchedBooks: [] })
 		}
 	}
 
@@ -49,7 +43,7 @@ class SearchBooks extends React.Component {
 					</div>
 				</div>
 				<div className="search-books-results">
-				<ol className="books-grid">
+					<ol className="books-grid">
             {
               this.state.searchedBooks.map(book => {
                 let shelfName = "none";

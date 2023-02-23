@@ -7,6 +7,7 @@ import BooksShelf from './BooksShelf'
 
 class BooksApp extends React.Component {
 state = {
+  books: [],
   shelves:{},
   searchedBooks: []
 }
@@ -21,6 +22,7 @@ updateShelf = (book, shelf) => {
 
   getAllBooks= () => {
     BooksAPI.getAll().then((books) => {
+      this.setState({ books })
       const shelves = books.reduce((acc, shelfCategory) => {
         const key = shelfCategory['shelf']
         if (!acc[key]) {
@@ -30,7 +32,6 @@ updateShelf = (book, shelf) => {
         return acc
       }, {})
       this.setState(() => ({
-        allBooks: books,
         shelves: shelves
       }))
     })
@@ -44,7 +45,7 @@ updateShelf = (book, shelf) => {
             path='/search'
             element={
               <SearchPage
-                allBooks={this.state.allBooks}
+                allBooks={this.state.books}
                 handleUpdateShelf={this.updateShelf}
               />
             }
